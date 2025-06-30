@@ -76,7 +76,7 @@
             cursor: pointer;
         }
         .service-card:hover {
-            transform: translateY(-10px) rotateY(5deg) rotateX(5deg);
+            transform: translateY(-10px); /* ✅ FIXED: Removed rotateY and rotateX */
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             border-color: var(--glow-color);
         }
@@ -218,7 +218,6 @@
 </head>
 <body class="antialiased">
 
-    <!-- Sidebar Navigation -->
     <nav class="sidebar-nav">
         <a href="#services" class="active" data-section="services">
             <i class="fas fa-cubes"></i>
@@ -250,7 +249,6 @@
             </header>
 
             <main>
-                <!-- Section 1: Services for Brands -->
                 <section id="services" class="mb-20 reveal">
                     <h2 class="section-title">
                         <i class="fas fa-cubes"></i>
@@ -261,35 +259,30 @@
                         <h3 class="text-3xl font-bold mb-6 text-cyan-400">أولاً: الباقات الأساسية (بدون إنتاج داخلي)</h3>
                         <p class="text-gray-400 mb-8">في هذه الباقات، يتولى العميل إنتاج المحتوى، بينما يقدم فريق خطوات الاستراتيجية، الكتابة، التوجيه، والتحليل. اضغط على أي باقة لمعرفة التفاصيل الكاملة.</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-                            <!-- Card 1 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="content-marketing">
                                 <i class="fas fa-pen-nib text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">1. التسويق بالمحتوى</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">استراتيجية وخطة محتوى، تحليل وتحسين، توجيه إبداعي، و Edit احترافي...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
-                            <!-- Card 2 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="performance-marketing">
                                 <i class="fas fa-bullseye text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">2. التسويق بالأداء</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تحليل واستراتيجية إعلانية (Meta)، كتابة كوبي، إدارة وتحسين الحملات...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
-                            <!-- Card 3 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="integrated">
                                 <i class="fas fa-layer-group text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">3. الباقة المتكاملة</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تجمع كل ما في باقة المحتوى والأداء معًا بسعر مخفض...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$500 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
-                            <!-- Card 4 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="growth">
                                 <i class="fas fa-chart-line text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">4. باقة النمو</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تشمل الباقة المتكاملة مع CRM (ManyChat) وصفحات هبوط...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$750 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
-                            <!-- NEW Growth Pro Card -->
                             <div class="service-card premium rounded-xl p-6 flex flex-col border-2 border-amber-500" data-plan="growth-pro">
                                 <i class="fas fa-crown text-4xl mb-4 text-amber-400"></i>
                                 <h4 class="text-xl font-bold mb-2 text-amber-300">5. باقة النمو برو</h4>
@@ -353,7 +346,6 @@
                     </div>
                 </section>
 
-                <!-- Other Sections (Training, Digital Products, etc.) -->
                 <section id="training" class="mb-20 reveal">
                     <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i><span>مصدر الدخل الثاني: التدريب والكورسات</span></h2>
                     <div class="service-card rounded-xl p-8">
@@ -442,7 +434,6 @@
         </div>
     </div>
 
-    <!-- Modal Structure -->
     <div id="plan-modal" class="modal-overlay">
         <div class="modal-container">
             <button id="modal-close" class="modal-close-btn">&times;</button>
