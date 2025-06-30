@@ -8,6 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        /* Box sizing reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            width: 100%;
+            max-width: 100%; /* Ensure no overflow */
+        }
+
         :root {
             --glow-color: #48cae4;
             --premium-glow-color: #f59e0b;
@@ -17,7 +28,8 @@
             font-family: 'Tajawal', sans-serif;
             background-color: #0d1117;
             color: #e6edf3;
-            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
 
         /* --- Glowing Edges & Background --- */
@@ -25,11 +37,16 @@
             position: relative;
             padding: 4px;
             z-index: 1;
+            overflow: hidden; /* Clip overflow from blur effect */
+            border-radius: 12px; /* Match inner container + padding */
         }
         .glowing-container::before {
             content: '';
             position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
+            top: -20px; /* Compensate for blur */
+            right: -20px; /* Compensate for blur */
+            bottom: -20px; /* Compensate for blur */
+            left: -20px; /* Compensate for blur */
             background: conic-gradient(
                 from 180deg at 50% 50%,
                 #0077b6, #0096c7, #00b4d8, #48cae4, #90e0ef, #ade8f4, #caf0f8,
@@ -43,6 +60,7 @@
             background-color: #0d1117;
             padding: 2rem;
             border-radius: 8px;
+            position: relative; /* Ensure content stays within bounds */
         }
         
         @keyframes background-pan {
@@ -76,7 +94,7 @@
             cursor: pointer;
         }
         .service-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) rotateY(5deg) rotateX(5deg);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             border-color: var(--glow-color);
         }
@@ -88,27 +106,27 @@
         .sidebar-nav {
             position: fixed;
             top: 50%;
-            right: 10px;
+            right: 10px; /* Closer to the edge */
             transform: translateY(-50%);
             z-index: 1000;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 8px; /* Reduced gap */
             background: rgba(22, 27, 34, 0.8);
             backdrop-filter: blur(10px);
-            padding: 8px;
+            padding: 8px; /* Reduced padding */
             border-radius: 50px;
             border: 1px solid #30363d;
         }
         .sidebar-nav a {
-            width: 40px;
-            height: 40px;
+            width: 40px; /* Smaller icon container */
+            height: 40px; /* Smaller icon container */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #8b949e;
-            font-size: 1.1rem;
+            font-size: 1.1rem; /* Smaller icon */
             transition: all 0.3s ease;
             position: relative;
         }
@@ -214,27 +232,25 @@
             transform: rotate(90deg);
         }
 
-        /* ✅ START: APPLIED CSS FIX */
-        html, body {
-            overflow-x: hidden !important;
-            position: relative;
-            max-width: 100vw;
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .glowing-container-inner {
+                padding: 1rem;
+            }
+            
+            .service-card {
+                padding: 1rem;
+            }
         }
-        .glowing-container,.glowing-container-inner,main,section,table,.sidebar-nav {
-            max-width: 100vw;
-            overflow-x: hidden;
-            box-sizing: border-box;
-        }
-        .grid, .flex {
-            max-width: 100%;
-            box-sizing: border-box;
-        }
-        /* ✅ END: APPLIED CSS FIX */
-
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- Sidebar Navigation -->
     <nav class="sidebar-nav">
         <a href="#services" class="active" data-section="services">
             <i class="fas fa-cubes"></i>
@@ -266,6 +282,7 @@
             </header>
 
             <main>
+                <!-- Section 1: Services for Brands -->
                 <section id="services" class="mb-20 reveal">
                     <h2 class="section-title">
                         <i class="fas fa-cubes"></i>
@@ -276,30 +293,35 @@
                         <h3 class="text-3xl font-bold mb-6 text-cyan-400">أولاً: الباقات الأساسية (بدون إنتاج داخلي)</h3>
                         <p class="text-gray-400 mb-8">في هذه الباقات، يتولى العميل إنتاج المحتوى، بينما يقدم فريق خطوات الاستراتيجية، الكتابة، التوجيه، والتحليل. اضغط على أي باقة لمعرفة التفاصيل الكاملة.</p>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                            <!-- Card 1 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="content-marketing">
                                 <i class="fas fa-pen-nib text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">1. التسويق بالمحتوى</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">استراتيجية وخطة محتوى، تحليل وتحسين، توجيه إبداعي، و Edit احترافي...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
+                            <!-- Card 2 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="performance-marketing">
                                 <i class="fas fa-bullseye text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">2. التسويق بالأداء</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تحليل واستراتيجية إعلانية (Meta)، كتابة كوبي، إدارة وتحسين الحملات...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
+                            <!-- Card 3 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="integrated">
                                 <i class="fas fa-layer-group text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">3. الباقة المتكاملة</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تجمع كل ما في باقة المحتوى والأداء معًا بسعر مخفض...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$500 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
+                            <!-- Card 4 -->
                             <div class="service-card rounded-xl p-6 flex flex-col" data-plan="growth">
                                 <i class="fas fa-chart-line text-4xl mb-4 text-cyan-400"></i>
                                 <h4 class="text-xl font-bold mb-2">4. باقة النمو</h4>
                                 <p class="text-gray-400 text-sm mb-4 flex-grow">تشمل الباقة المتكاملة مع CRM (ManyChat) وصفحات هبوط...</p>
                                 <div class="text-3xl font-bold text-cyan-300 mt-auto">$750 <span class="text-base text-gray-400">/شهريًا</span></div>
                             </div>
+                            <!-- NEW Growth Pro Card -->
                             <div class="service-card premium rounded-xl p-6 flex flex-col border-2 border-amber-500" data-plan="growth-pro">
                                 <i class="fas fa-crown text-4xl mb-4 text-amber-400"></i>
                                 <h4 class="text-xl font-bold mb-2 text-amber-300">5. باقة النمو برو</h4>
@@ -363,6 +385,7 @@
                     </div>
                 </section>
 
+                <!-- Other Sections (Training, Digital Products, etc.) -->
                 <section id="training" class="mb-20 reveal">
                     <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i><span>مصدر الدخل الثاني: التدريب والكورسات</span></h2>
                     <div class="service-card rounded-xl p-8">
@@ -438,7 +461,7 @@
                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-box-tissue text-cyan-400"></i><span>لا حاجة لإدارة مخزون.</span></li>
                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-lightbulb text-cyan-400"></i><span>تركيز كامل على الإبداع والتسويق.</span></li>
                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-expand-arrows-alt text-cyan-400"></i><span>إمكانية التوسع بسهولة.</span></li>
-                           <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-vial text-cyan-400"></i><span>مناسب لاختبار السوق والمنتجات.</span></li>
+                           <li class="flex items-center gap-3 bg-radius-800/50 p-3 rounded-lg"><i class="fas fa-vial text-cyan-400"></i><span>مناسب لاختبار السوق والمنتجات.</span></li>
                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-sync-alt text-cyan-400"></i><span>نمو قابل للتكرار.</span></li>
                         </ul>
                          <div class="bg-cyan-900/30 border border-cyan-700 rounded-lg p-4">
@@ -451,6 +474,7 @@
         </div>
     </div>
 
+    <!-- Modal Structure -->
     <div id="plan-modal" class="modal-overlay">
         <div class="modal-container">
             <button id="modal-close" class="modal-close-btn">&times;</button>
