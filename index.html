@@ -3,645 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>باقات وخدمات شركة خطوات</title>
+    <title>برنامج التمرين</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        /* Box sizing reset */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        html, body {
-            overflow-x: hidden; /* Prevent horizontal scroll */
-            width: 100%;
-            max-width: 100%; /* Ensure no overflow */
-        }
-
-        :root {
-            --glow-color: #48cae4;
-            --premium-glow-color: #f59e0b;
-        }
-
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #0d1117;
-            color: #e6edf3;
-            margin: 0;
-            padding: 0;
+            scroll-behavior: smooth;
         }
-
-        /* --- Glowing Edges & Background --- */
-        .glowing-container {
-            position: relative;
-            padding: 4px;
-            z-index: 1;
-            overflow: hidden; /* Clip overflow from blur effect */
-            border-radius: 12px; /* Match inner container + padding */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            padding: 0 1.5rem;
         }
-        .glowing-container::before {
-            content: '';
-            position: absolute;
-            top: -20px; /* Compensate for blur */
-            right: -20px; /* Compensate for blur */
-            bottom: -20px; /* Compensate for blur */
-            left: -20px; /* Compensate for blur */
-            background: conic-gradient(
-                from 180deg at 50% 50%,
-                #0077b6, #0096c7, #00b4d8, #48cae4, #90e0ef, #ade8f4, #caf0f8,
-                #ade8f4, #90e0ef, #48cae4, #00b4d8, #0096c7, #0077b6
-            );
-            z-index: -2;
-            filter: blur(20px);
-            animation: background-pan 10s linear infinite;
+        .accordion-button.active + .accordion-content {
+            max-height: 1000px; /* Adjust as needed */
+            padding: 1.5rem;
         }
-        .glowing-container-inner {
-            background-color: #0d1117;
-            padding: 2rem;
-            border-radius: 8px;
-            position: relative; /* Ensure content stays within bounds */
-        }
-        
-        @keyframes background-pan {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #161b22; }
-        ::-webkit-scrollbar-thumb { background: var(--glow-color); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00b4d8; }
-
-        /* --- Custom Card & Reveal Animations --- */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px) scale(0.98);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* --- Interactive Service Card --- */
-        .service-card {
-            background: #161b22;
-            border: 1px solid #30363d;
-            transition: all 0.4s ease;
-            transform-style: preserve-3d;
-            cursor: pointer;
-        }
-        .service-card:hover {
-            transform: translateY(-10px) rotateY(5deg) rotateX(5deg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-color: var(--glow-color);
-        }
-        .service-card.premium:hover {
-             border-color: var(--premium-glow-color);
-        }
-
-        /* --- Sidebar Navigation (EDITED FOR SMALLER SIZE) --- */
-        .sidebar-nav {
-            position: fixed;
-            top: 50%;
-            right: 10px; /* Closer to the edge */
-            transform: translateY(-50%);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            gap: 8px; /* Reduced gap */
-            background: rgba(22, 27, 34, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 8px; /* Reduced padding */
-            border-radius: 50px;
-            border: 1px solid #30363d;
-        }
-        .sidebar-nav a {
-            width: 40px; /* Smaller icon container */
-            height: 40px; /* Smaller icon container */
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #8b949e;
-            font-size: 1.1rem; /* Smaller icon */
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        .sidebar-nav a:hover, .sidebar-nav a.active {
-            background-color: var(--glow-color);
-            color: #0d1117;
-            transform: scale(1.1);
-        }
-        .sidebar-nav a .tooltip {
-            position: absolute;
-            right: 120%;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: #161b22;
-            color: #e6edf3;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            border: 1px solid #30363d;
-        }
-        .sidebar-nav a:hover .tooltip {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        h1, h2, h3 {
-            text-shadow: 0 0 10px rgba(72, 202, 228, 0.2);
-        }
-        
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #e6edf3;
-            border-bottom: 2px solid var(--glow-color);
-            padding-bottom: 1rem;
-        }
-        .section-title i {
-            color: var(--glow-color);
-            text-shadow: 0 0 15px var(--glow-color);
-        }
-
-        .price-table tr:hover td {
-            background-color: rgba(72, 202, 228, 0.05);
-        }
-        
-        /* --- Modal Styles --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        .modal-overlay.visible {
-            display: flex;
-            opacity: 1;
-        }
-        .modal-container {
-            background: #161b22;
-            border: 1px solid var(--glow-color);
-            border-radius: 12px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            transform: scale(0.95);
+        .accordion-button .icon {
             transition: transform 0.3s ease-in-out;
         }
-        .modal-overlay.visible .modal-container {
-            transform: scale(1);
+        .accordion-button.active .icon {
+            transform: rotate(180deg);
         }
-        .modal-close-btn {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: none;
-            border: none;
-            color: #8b949e;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.2s ease, transform 0.2s ease;
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
         }
-        .modal-close-btn:hover {
-            color: #e6edf3;
-            transform: rotate(90deg);
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
-
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .section-title {
-                font-size: 1.8rem;
+        /* Print-specific styles */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            
-            .glowing-container-inner {
-                padding: 1rem;
+            .no-print {
+                display: none !important;
             }
-            
-            .service-card {
-                padding: 1rem;
+            .print-friendly {
+                background-color: transparent !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+                margin-bottom: 1rem;
+            }
+            .print-text-black {
+                color: #000 !important;
+            }
+            .accordion-content {
+                max-height: none !important;
+                display: block !important;
+                padding: 1rem 0 !important;
+                overflow: visible !important;
+            }
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            thead {
+                display: table-header-group;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .video-link {
+                display: none; /* Hide video links when printing */
             }
         }
     </style>
 </head>
-<body class="antialiased">
+<body class="bg-gray-900 text-gray-200">
 
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar-nav">
-        <a href="#services" class="active" data-section="services">
-            <i class="fas fa-cubes"></i>
-            <span class="tooltip">الخدمات للبراندات</span>
-        </a>
-        <a href="#training" data-section="training">
-            <i class="fas fa-chalkboard-teacher"></i>
-            <span class="tooltip">التدريب والكورسات</span>
-        </a>
-        <a href="#digital-products" data-section="digital-products">
-            <i class="fas fa-box-open"></i>
-            <span class="tooltip">المنتجات الرقمية</span>
-        </a>
-        <a href="#brand-building" data-section="brand-building">
-            <i class="fas fa-rocket"></i>
-            <span class="tooltip">بناء براند من الصفر</span>
-        </a>
-        <a href="#dropshipping" data-section="dropshipping">
-            <i class="fas fa-shipping-fast"></i>
-            <span class="tooltip">الدروب شيبنج</span>
-        </a>
-    </nav>
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-4xl md:text-5xl font-black text-white mb-2">برنامج التمرين الشامل</h1>
+            <p class="text-lg text-teal-400">رحلتك نحو القوة تبدأ هنا - 10 أسابيع من التطور</p>
+        </header>
 
-    <div class="glowing-container">
-        <div class="glowing-container-inner">
-            <header class="text-center mb-16 reveal">
-                <h1 class="text-5xl md:text-7xl font-extrabold mb-4" style="color: #caf0f8;">وثيقة خدمات <span style="color: var(--glow-color);">خطوات</span></h1>
-                <p class="text-lg text-gray-400 max-w-3xl mx-auto">الإصدار الكامل لمصادر الدخل، الباقات، والخدمات الإبداعية</p>
-            </header>
-
-            <main>
-                <!-- Section 1: Services for Brands -->
-                <section id="services" class="mb-20 reveal">
-                    <h2 class="section-title">
-                        <i class="fas fa-cubes"></i>
-                        <span>مصدر الدخل الأول: الخدمات للبراندات</span>
-                    </h2>
-                    
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold mb-6 text-cyan-400">أولاً: الباقات الأساسية (بدون إنتاج داخلي)</h3>
-                        <p class="text-gray-400 mb-8">في هذه الباقات، يتولى العميل إنتاج المحتوى، بينما يقدم فريق خطوات الاستراتيجية، الكتابة، التوجيه، والتحليل. اضغط على أي باقة لمعرفة التفاصيل الكاملة.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
-                            <!-- Card 1 -->
-                            <div class="service-card rounded-xl p-6 flex flex-col" data-plan="content-marketing">
-                                <i class="fas fa-pen-nib text-4xl mb-4 text-cyan-400"></i>
-                                <h4 class="text-xl font-bold mb-2">1. التسويق بالمحتوى</h4>
-                                <p class="text-gray-400 text-sm mb-4 flex-grow">استراتيجية وخطة محتوى، تحليل وتحسين، توجيه إبداعي، و Edit احترافي...</p>
-                                <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
-                            </div>
-                            <!-- Card 2 -->
-                            <div class="service-card rounded-xl p-6 flex flex-col" data-plan="performance-marketing">
-                                <i class="fas fa-bullseye text-4xl mb-4 text-cyan-400"></i>
-                                <h4 class="text-xl font-bold mb-2">2. التسويق بالأداء</h4>
-                                <p class="text-gray-400 text-sm mb-4 flex-grow">تحليل واستراتيجية إعلانية (Meta)، كتابة كوبي، إدارة وتحسين الحملات...</p>
-                                <div class="text-3xl font-bold text-cyan-300 mt-auto">$300 <span class="text-base text-gray-400">/شهريًا</span></div>
-                            </div>
-                            <!-- Card 3 -->
-                            <div class="service-card rounded-xl p-6 flex flex-col" data-plan="integrated">
-                                <i class="fas fa-layer-group text-4xl mb-4 text-cyan-400"></i>
-                                <h4 class="text-xl font-bold mb-2">3. الباقة المتكاملة</h4>
-                                <p class="text-gray-400 text-sm mb-4 flex-grow">تجمع كل ما في باقة المحتوى والأداء معًا بسعر مخفض...</p>
-                                <div class="text-3xl font-bold text-cyan-300 mt-auto">$500 <span class="text-base text-gray-400">/شهريًا</span></div>
-                            </div>
-                            <!-- Card 4 -->
-                            <div class="service-card rounded-xl p-6 flex flex-col" data-plan="growth">
-                                <i class="fas fa-chart-line text-4xl mb-4 text-cyan-400"></i>
-                                <h4 class="text-xl font-bold mb-2">4. باقة النمو</h4>
-                                <p class="text-gray-400 text-sm mb-4 flex-grow">تشمل الباقة المتكاملة مع CRM (ManyChat) وصفحات هبوط...</p>
-                                <div class="text-3xl font-bold text-cyan-300 mt-auto">$750 <span class="text-base text-gray-400">/شهريًا</span></div>
-                            </div>
-                            <!-- NEW Growth Pro Card -->
-                            <div class="service-card premium rounded-xl p-6 flex flex-col border-2 border-amber-500" data-plan="growth-pro">
-                                <i class="fas fa-crown text-4xl mb-4 text-amber-400"></i>
-                                <h4 class="text-xl font-bold mb-2 text-amber-300">5. باقة النمو برو</h4>
-                                <p class="text-gray-400 text-sm mb-4 flex-grow">كل قوة باقة النمو مع نظام GoHighLevel الكامل للـCRM والأتمتة المتقدمة...</p>
-                                <div class="text-3xl font-bold text-amber-300 mt-auto">$1200 <span class="text-base text-gray-400">/شهريًا</span></div>
-                            </div>
-                        </div>
+        <section class="mb-12 fade-in">
+            <div class="bg-gray-800 rounded-lg p-8 max-w-4xl mx-auto print-friendly">
+                <h2 class="text-3xl font-bold text-center mb-6 print-text-black">لماذا هذا النظام هو الأفضل لك؟</h2>
+                <p class="text-center text-gray-300 mb-6 print-text-black">نظام التمرين هذا ليس مجرد جدول، بل هو استراتيجية علمية مبنية على مبدأ "التكرار العالي" (High Frequency) الذي أثبت فعاليته لتحقيق أقصى بناء عضلي. إليك الأسباب:</p>
+                <div class="grid md:grid-cols-2 gap-6 text-right">
+                    <div class="bg-gray-700/50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl text-teal-400 mb-2">تحفيز بناء العضلات بشكل مستمر</h3>
+                        [cite_start]<p class="text-gray-300">بدلاً من تمرين كل عضلة مرة واحدة أسبوعياً، هذا النظام يحفز عملية بناء البروتين العضلي (MPS) عدة مرات في الأسبوع، مما يمنع "إهدار" أيام كان يمكن أن تنمو فيها عضلاتك[cite: 707].</p>
                     </div>
-
-                    <div class="mb-12">
-                        <h3 class="text-3xl font-bold mb-6 text-cyan-400">ثانياً: باقة الشراكة (تشمل الإنتاج الكامل)</h3>
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div class="service-card rounded-xl p-8 border-cyan-500" data-plan="partnership-percentage">
-                                <h4 class="text-2xl font-bold mb-3">الخيار الأول: نسبة من المبيعات</h4>
-                                <p class="text-5xl font-extrabold mb-4 text-cyan-300">14%</p>
-                                <ul class="space-y-2 text-gray-300">
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>تُحتسب من المبيعات بدءًا من أول حملة.</span></li>
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>مدة التعاقد: 6 أشهر.</span></li>
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>يُدفع مبلغ مقدم يُقتطع لاحقًا من النسبة.</span></li>
-                                </ul>
-                            </div>
-                             <div class="service-card rounded-xl p-8 border-cyan-500" data-plan="partnership-fixed">
-                                <h4 class="text-2xl font-bold mb-3">الخيار الثاني: اشتراك ثابت</h4>
-                                <p class="text-5xl font-extrabold mb-4 text-cyan-300">$2800 <span class="text-2xl font-normal text-gray-400">/شهريًا</span></p>
-                                <ul class="space-y-2 text-gray-300">
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>يُدفع أول مبلغ مقدمًا.</span></li>
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>أول 20 يوم للتحضير والبحث والتخطيط.</span></li>
-                                    <li class="flex items-start gap-3"><i class="fas fa-check-circle mt-1 text-cyan-400"></i><span>يُجدد الاشتراك كل 30 يوم من بدء النشر.</span></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="bg-gray-700/50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl text-teal-400 mb-2">جودة أعلى في كل تمرين</h3>
+                        [cite_start]<p class="text-gray-300">عندما تمرن العضلة بتمرين واحد أو اثنين فقط في الجلسة، تكون في قمة طاقتك وتركيزك، مما يسمح لك برفع أوزان أثقل وأداء أفضل، بدلاً من الوصول إليها وأنت مرهق في نهاية التمرين[cite: 731].</p>
                     </div>
-
-                    <div class="mb-12">
-                         <h3 class="text-3xl font-bold mb-6 text-cyan-400">ثالثاً: كتيب تسعير خدمات الإنتاج الإبداعي (مستقلة)</h3>
-                         <div class="overflow-x-auto rounded-lg border border-gray-700">
-                            <table class="w-full text-right">
-                                <thead class="bg-gray-800 text-gray-300">
-                                    <tr>
-                                        <th class="p-4 font-bold">نوع الخدمة الإبداعية</th>
-                                        <th class="p-4 font-bold">السعر (يبدأ من)</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-700">
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">Unboxing احترافي</td><td class="p-4 font-mono text-cyan-300">80$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">تصوير Snapchat Style</td><td class="p-4 font-mono text-cyan-300">70$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">UGC (محتوى واقعي من شخص حقيقي)</td><td class="p-4 font-mono text-cyan-300">90$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">CGI / 3D متحرك</td><td class="p-4 font-mono text-cyan-300">250$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">تجربة واستخدام منتج</td><td class="p-4 font-mono text-cyan-300">100$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">Reels لمودلز</td><td class="p-4 font-mono text-cyan-300">120$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">Reels سيناريو</td><td class="p-4 font-mono text-cyan-300">150$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">Idea Only (فكرة محتوى/إعلان مكتوبة)</td><td class="p-4 font-mono text-cyan-300">20$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">Edit احترافي</td><td class="p-4 font-mono text-cyan-300">50$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">مونتاج عادي</td><td class="p-4 font-mono text-cyan-300">30$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">موشن جرافيك</td><td class="p-4 font-mono text-cyan-300">100$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">تصميم بوست ثابت</td><td class="p-4 font-mono text-cyan-300">15$</td></tr>
-                                    <tr class="hover:bg-gray-800/50 transition-colors duration-200"><td class="p-4">تصميم إعلان دعائي</td><td class="p-4 font-mono text-cyan-300">20$</td></tr>
-                                </tbody>
-                            </table>
-                         </div>
+                    <div class="bg-gray-700/50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl text-teal-400 mb-2">زيادة الحجم التدريبي الأسبوعي</h3>
+                        [cite_start]<p class="text-gray-300">يسمح لك التكرار العالي بزيادة إجمالي عدد المجموعات الأسبوعية لكل عضلة بسهولة، وهو عامل أساسي ومباشر في زيادة النمو العضلي[cite: 723, 724].</p>
                     </div>
-                </section>
-
-                <!-- Other Sections (Training, Digital Products, etc.) -->
-                <section id="training" class="mb-20 reveal">
-                    <h2 class="section-title"><i class="fas fa-chalkboard-teacher"></i><span>مصدر الدخل الثاني: التدريب والكورسات</span></h2>
-                    <div class="service-card rounded-xl p-8">
-                        <p class="mb-4 text-gray-300">يهدف هذا الخط إلى تحويل خبرات فريق "خطوات" إلى برامج تدريبية احترافية تحقق دخلاً مستقلاً، وتُرسّخ مكانة الشركة كمصدر موثوق للمعرفة التطبيقية في مجال التسويق.</p>
-                        <h4 class="text-xl font-bold mb-3 text-cyan-400">المحتوى يشمل:</h4>
-                        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-300 mb-6">
-                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-video text-cyan-400"></i><span>كورسات إلكترونية مسجلة</span></li>
-                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-users text-cyan-400"></i><span>ورش عمل مباشرة</span></li>
-                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-laptop-code text-cyan-400"></i><span>برامج تدريب مكثفة</span></li>
-                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-headset text-cyan-400"></i><span>استشارات فردية أو جماعية</span></li>
-                            <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-building text-cyan-400"></i><span>تدريب مخصص للشركات</span></li>
+                    <div class="bg-gray-700/50 p-6 rounded-lg">
+                        <h3 class="font-bold text-xl text-teal-400 mb-2">إتقان الحركات بشكل أسرع</h3>
+                        [cite_start]<p class="text-gray-300">تكرار الحركات الأساسية مثل السكوات والبنش برس عدة مرات في الأسبوع يجعلك "تتقن" الأداء كمهارة، مما يزيد من قوتك وفعالية تمرينك على المدى الطويل[cite: 748, 750].</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="mb-12 fade-in">
+            <h2 class="text-3xl font-bold text-center mb-8 print-text-black">مراحل تقدم البرنامج</h2>
+            <div class="space-y-4 max-w-4xl mx-auto">
+                <div class="bg-gray-800 rounded-lg print-friendly">
+                    <button class="accordion-button w-full flex justify-between items-center p-6 text-xl font-bold text-right focus:outline-none">
+                        <span class="text-teal-400">المرحلة الأولى: Block 1 (الأسابيع 1-4)</span>
+                        <span class="icon text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content text-gray-300">
+                        <p class="mb-2"><strong>الهدف:</strong> تهيئة جسمك للتأقلم مع التمارين عالية التكرار.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>الأسبوع 1 و 2:</strong> تبدأ بشدة منخفضة (RPE 6-7) للاعتياد على النظام. في الأسبوع الثاني، يزداد حجم التكرارات في التمارين الأساسية.</li>
+                            <li><strong>الأسبوع 3 و 4:</strong> تزيد شدة التمرين تدريجيًا (RPE 7-9) لتصل إلى ذروتها في الأسبوع الرابع. الهدف في التمارين الثانوية هو زيادة الوزن المرفوع.</li>
                         </ul>
-                         <div class="bg-cyan-900/30 border border-cyan-700 rounded-lg p-4">
-                            <h4 class="font-bold text-cyan-300">الأهمية والأولوية:</h4>
-                            <p class="text-gray-400">مصدر دخل استراتيجي ومستدام، يسوّق للشركة كخبير، ويفتح فرص شراكات جديدة. يجب البدء في تطويره بشكل تدريجي.</p>
-                        </div>
                     </div>
-                </section>
-                <section id="digital-products" class="mb-20 reveal">
-                    <h2 class="section-title"><i class="fas fa-box-open"></i><span>مصدر الدخل الثالث: المنتجات الرقمية</span></h2>
-                    <div class="service-card rounded-xl p-8">
-                        <p class="mb-4 text-gray-300">يهدف هذا الخط إلى تحويل خبرات "خطوات" اليومية إلى أدوات رقمية عملية جاهزة للبيع، يستفيد منها جمهور واسع من المسوقين والتجار، وتشكل دخلاً متجددًا منخفض التكاليف.</p>
-                        <h4 class="text-xl font-bold mb-3 text-cyan-400">أمثلة على المنتجات:</h4>
-                        <ul class="list-disc pr-6 space-y-2 text-gray-300 mb-6">
-                            <li>قوالب خطة محتوى جاهزة وقابلة للتعديل.</li>
-                            <li>نماذج لاستراتيجية إطلاق منتج جديد.</li>
-                            <li>أدلة لاختيار المؤثرين وإدارة حملات UGC.</li>
-                            <li>كتيبات إلكترونية عن التسويق بالأداء أو بناء البراند.</li>
-                            <li>دفاتر عمل تفاعلية (Workbooks) عبر Excel أو Notion.</li>
+                </div>
+                <div class="bg-gray-800 rounded-lg print-friendly">
+                    <button class="accordion-button w-full flex justify-between items-center p-6 text-xl font-bold text-right focus:outline-none">
+                        <span class="text-teal-400">المرحلة الثانية: Block 2 (الأسابيع 5-8)</span>
+                        <span class="icon text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content text-gray-300">
+                        <p class="mb-2"><strong>الهدف:</strong> التركيز بشكل أكبر على تطوير القوة والمهارة في الرفع.</p>
+                        <ul class="list-disc list-inside space-y-2">
+                            <li><strong>الاختلاف:</strong> تغيير بعض التمارين واستخدام نظام "Top Sets" (مجموعة واحدة ثقيلة) و "Back-off Sets" (مجموعات أخف) في التمارين الأساسية.</li>
+                            <li><strong>التقدم:</strong> تزداد شدة التمرين (RPE) بشكل خطي لتصل إلى ذروتها في الأسبوع الثامن.</li>
                         </ul>
-                         <div class="bg-cyan-900/30 border border-cyan-700 rounded-lg p-4">
-                            <h4 class="font-bold text-cyan-300">الهدف والأولوية:</h4>
-                            <p class="text-gray-400">تنويع مصادر الدخل، رفع قيمة "خطوات" كمرجع تسويقي، واستغلال الخبرة المتراكمة. يعتبر مصدر دخل استراتيجي طويل الأجل.</p>
-                        </div>
                     </div>
-                </section>
-                <section id="brand-building" class="mb-20 reveal">
-                    <h2 class="section-title"><i class="fas fa-rocket"></i><span>مصدر الدخل الرابع: بناء براندات من الصفر</span></h2>
-                    <div class="service-card rounded-xl p-8">
-                        <p class="mb-4 text-gray-300">شراكة استراتيجية مع التجار الذين يمتلكون رأس مال ولكن يفتقرون للخبرة. "خطوات" تقدم الخبرة في التسويق واختيار المنتجات وبناء العلامة التجارية مقابل نسبة شراكة، بينما يمول التاجر التكاليف.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div>
-                                <h4 class="text-xl font-bold mb-3 text-cyan-400">آلية العمل (دور خطوات):</h4>
-                                <ul class="list-disc pr-6 space-y-2 text-gray-300">
-                                    <li>اختيار فكرة المنتج.</li>
-                                    <li>التواصل مع الموردين.</li>
-                                    <li>تصميم البراند من الصفر.</li>
-                                    <li>بناء وتنفيذ خطة تسويق متكاملة.</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="text-xl font-bold mb-3 text-cyan-400">النموذج المالي:</h4>
-                                <ul class="list-disc pr-6 space-y-2 text-gray-300">
-                                    <li>توزيع الأرباح: غالبًا 50% للتاجر / 50% لخطوات.</li>
-                                    <li>تعيين محاسب مستقل للإشراف.</li>
-                                    <li>توزيع الأرباح شهريًا بشكل موثق.</li>
-                                    <li>حوكمة وشفافية كاملة عبر اتفاقيات وتقارير.</li>
-                                </ul>
-                            </div>
-                        </div>
-                         <div class="bg-cyan-900/30 border border-cyan-700 rounded-lg p-4">
-                            <h4 class="font-bold text-cyan-300">لماذا هذا النموذج مهم؟</h4>
-                            <p class="text-gray-400">يخدم شريحة ضخمة من السوق ("تاجر معه فلوس بس ما يدري من وين يبدأ")، يقلل المخاطر على خطوات، ويضمن دخول مستمر في مشاريع قوية. يجب العمل فورًا على تطوير هذا النموذج.</p>
-                        </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg print-friendly">
+                    <button class="accordion-button w-full flex justify-between items-center p-6 text-xl font-bold text-right focus:outline-none">
+                        <span class="text-teal-400">الأسبوع التاسع: Deload Week (أسبوع تخفيف الحمل)</span>
+                        <span class="icon text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content text-gray-300">
+                        <p class="mb-2"><strong>الهدف:</strong> الراحة النشطة والاستشفاء التام بعد المجهود العالي، وتجهيزك لأسبوع قياس الأرقام القصوى.</p>
+                        <p>سيتم تقليل شدة ومجهود التمارين بشكل كبير، مما يسمح لك بالاستشفاء مع الحفاظ على نشاطك.</p>
                     </div>
-                </section>
-                <section id="dropshipping" class="reveal">
-                    <h2 class="section-title"><i class="fas fa-shipping-fast"></i><span>مصدر الدخل الخامس: الدروب شيبنج</span></h2>
-                    <div class="service-card rounded-xl p-8">
-                        <p class="mb-4 text-gray-300">إنشاء متاجر إلكترونية متخصصة تعرض منتجات من منصات بيع بالجملة (مثل "موجود" و"فدشي"). خطوات تتولى التسويق وصناعة المحتوى بالكامل، بينما يتولى المورد العمليات اللوجستية من تجهيز وشحن ومتابعة.</p>
-                        <h4 class="text-xl font-bold mb-3 text-cyan-400">مميزات النموذج:</h4>
-                        <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-gray-300 mb-6">
-                           <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-box-tissue text-cyan-400"></i><span>لا حاجة لإدارة مخزون.</span></li>
-                           <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-lightbulb text-cyan-400"></i><span>تركيز كامل على الإبداع والتسويق.</span></li>
-                           <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-expand-arrows-alt text-cyan-400"></i><span>إمكانية التوسع بسهولة.</span></li>
-                           <li class="flex items-center gap-3 bg-radius-800/50 p-3 rounded-lg"><i class="fas fa-vial text-cyan-400"></i><span>مناسب لاختبار السوق والمنتجات.</span></li>
-                           <li class="flex items-center gap-3 bg-gray-800/50 p-3 rounded-lg"><i class="fas fa-sync-alt text-cyan-400"></i><span>نمو قابل للتكرار.</span></li>
-                        </ul>
-                         <div class="bg-cyan-900/30 border border-cyan-700 rounded-lg p-4">
-                            <h4 class="font-bold text-cyan-300">آلية الدخل:</h4>
-                            <p class="text-gray-400">تحقق شركة خطوات أرباحها من هامش الربح بين سعر الجملة الذي يوفره المورد وسعر البيع للعميل النهائي.</p>
-                        </div>
+                </div>
+                <div class="bg-gray-800 rounded-lg print-friendly">
+                    <button class="accordion-button w-full flex justify-between items-center p-6 text-xl font-bold text-right focus:outline-none">
+                        <span class="text-teal-400">الأسبوع العاشر: AMRAP Testing (أسبوع اختبار القوة)</span>
+                        <span class="icon text-teal-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content text-gray-300">
+                        <p class="mb-2"><strong>الهدف:</strong> قياس قوتك الحالية عن طريق أداء "أكبر عدد ممكن من التكرارات" (AMRAP) في التمارين الأساسية.</p>
+                        <p>النتائج ستساعدك على معرفة مدى تطور قوتك، ويمكنك استخدام هذه الأرقام الجديدة إذا قررت إعادة البرنامج مرة أخرى.</p>
                     </div>
-                </section>
-            </main>
-        </div>
-    </div>
+                </div>
+            </div>
+        </section>
 
-    <!-- Modal Structure -->
-    <div id="plan-modal" class="modal-overlay">
-        <div class="modal-container">
-            <button id="modal-close" class="modal-close-btn">&times;</button>
-            <h3 id="modal-title" class="text-3xl font-bold mb-6 text-cyan-400"></h3>
-            <div id="modal-content" class="text-gray-300 space-y-4"></div>
-        </div>
+        <section class="page-break">
+            <h2 class="text-3xl font-bold text-center mb-8 print-text-black">خطة تمرين الأسبوع الأول</h2>
+            
+            <div class="space-y-8">
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl fade-in print-friendly">
+                    <h3 class="text-2xl font-bold p-6 bg-gray-700 text-white">اليوم الأول: تركيز على الجزء السفلي (Lower Focused)</h3>
+                    <div class="p-2 md:p-6 overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="text-teal-400 text-sm">
+                                <tr>
+                                    <th class="p-3">التمرين</th>
+                                    <th class="p-3">المجموعات</th>
+                                    <th class="p-3">التكرارات</th>
+                                    <th class="p-3">الشدة</th>
+                                    <th class="p-3">الراحة</th>
+                                    <th class="p-3">ملاحظات</th>
+                                    <th class="p-3 video-link">فيديو</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Back Squat</td><td class="p-3">4</td><td class="p-3">4</td><td class="p-3">82.5%</td><td class="p-3">2-4 د</td><td class="p-3 text-sm">اجلس للخلف وللأسفل، افتح القدمين بزاوية 15 درجة، وادفع ركبتيك للخارج.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeffnippardfitness/video/7324328093571665157" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Dumbbell Incline Press</td><td class="p-3">3</td><td class="p-3">8</td><td class="p-3">RPE 8</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">زاوية البنش 45 درجة، ركز على الإحساس بالعضلة الصدرية العلوية.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@deltabolic/video/7477778832280358199" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Lying Leg Curl</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 6</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ركز على عصر عضلات الـ Hamstrings.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@hazzytrainer/video/7266272104687996165" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Pronated Pulldown</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 7</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">اسحب كوعيك للأسفل وللداخل.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeffnippardfitness/video/7361822709325597958" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Supinated EZ Bar Curl</td><td class="p-3">3</td><td class="p-3">15/15</td><td class="p-3">RPE 9</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">دروب سيت: 15 تكرار، قلل الوزن 50%، ثم 15 تكرار آخر.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@rawsets/video/7525092129236880654" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Hanging Leg Raise</td><td class="p-3">3</td><td class="p-3">12</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ارفع وركيك "لأعلى" مع عصر عضلات البطن، تجنب التأرجح.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@houseofpat/video/7197820506035244331" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                 <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl fade-in print-friendly">
+                    <h3 class="text-2xl font-bold p-6 bg-gray-700 text-white">اليوم الثاني: تركيز على الصدر (Chest Focused)</h3>
+                    <div class="p-2 md:p-6 overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="text-teal-400 text-sm">
+                                <tr><th class="p-3">التمرين</th><th class="p-3">المجموعات</th><th class="p-3">التكرارات</th><th class="p-3">الشدة</th><th class="p-3">الراحة</th><th class="p-3">ملاحظات</th><th class="p-3 video-link">فيديو</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Barbell Bench Press</td><td class="p-3">3</td><td class="p-3">3</td><td class="p-3">85%</td><td class="p-3">2-4 د</td><td class="p-3 text-sm">تقوس مريح بالظهر، توقف 1-2 ثانية على الصدر، ثم ادفع بقوة.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@deltabolic/video/7448112720408268037" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Low to High Cable Flye</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 8</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">اسحب كوعيك (وليس يديك) للأعلى والداخل.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7210918781260958982" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Barbell Hip Thrust or RDL</td><td class="p-3">3</td><td class="p-3">12</td><td class="p-3">RPE 6</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">اختر Hip Thrust للأرداف، أو RDL للـ Hamstrings.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@health_and_fitness_vids/video/7498103061022346519" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Chest-Supported T-Bar Row</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 6</td><td class="p-3">1-3 د</td><td class="p-3 text-sm">افرد لوحي الكتف بالكامل في الأسفل، واجمعهم في الأعلى.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7211294009212423430" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Arnold Press</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 7</td><td class="p-3">1-3 د</td><td class="p-3 text-sm">قم بتدوير الكتف للخارج أثناء الدفع.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@kg.workouts/video/7378561068370529554" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Tricep Pressdown</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ركز على عصر عضلة الترايسبس.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@gainsformen/video/7509999506071801134" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Hex Bar/Smith Shrug</td><td class="p-3">3</td><td class="p-3">12</td><td class="p-3">RPE 6</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ارفع كتفيك لأعلى وللداخل، كأنك تريد لمس أذنيك.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@marzrodie/video/7382548933769219335" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl fade-in print-friendly">
+                    <h3 class="text-2xl font-bold p-6 bg-gray-700 text-white">اليوم الثالث: تركيز على الظهر (Back Focused)</h3>
+                    <div class="p-2 md:p-6 overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="text-teal-400 text-sm">
+                                <tr><th class="p-3">التمرين</th><th class="p-3">المجموعات</th><th class="p-3">التكرارات</th><th class="p-3">الشدة</th><th class="p-3">الراحة</th><th class="p-3">ملاحظات</th><th class="p-3 video-link">فيديو</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Weighted Pull-Up</td><td class="p-3">3</td><td class="p-3">6</td><td class="p-3">RPE 8</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">قبضة أوسع من كتفيك بـ 1.5 مرة، اسحب صدرك نحو البار.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@gymplugofficial/video/7510299268826123525" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Chest-Supported T-Bar Row</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 8</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">افرد لوحي الكتف بالكامل في الأسفل، واجمعهم في الأعلى.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7211294009212423430" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Leg Press</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 6</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">لا تدع أسفل ظهرك يتقوس.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@kg.workouts/video/7275008075617062151" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Standing Calf Raise</td><td class="p-3">4</td><td class="p-3">8</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">توقف 1-2 ثانية في الأسفل عند كل تكرار.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7297017088156159237" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Cable Rope Upright Row</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ركز على عصر عضلات الترابيس العلوية.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@aihealth_1/video/7525405279039524118" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Hammer Curl</td><td class="p-3">3</td><td class="p-3">8</td><td class="p-3">RPE 9</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">حركة سلبية (نزول) في 3 ثوانٍ.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeff_nippard_clips/video/7478343596622613762" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl fade-in print-friendly">
+                    <h3 class="text-2xl font-bold p-6 bg-gray-700 text-white">اليوم الرابع: تركيز على الجزء السفلي 2 (Lower Focused 2)</h3>
+                    <div class="p-2 md:p-6 overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="text-teal-400 text-sm">
+                                <tr><th class="p-3">التمرين</th><th class="p-3">المجموعات</th><th class="p-3">التكرارات</th><th class="p-3">الشدة</th><th class="p-3">الراحة</th><th class="p-3">ملاحظات</th><th class="p-3 video-link">فيديو</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Deadlift</td><td class="p-3">4</td><td class="p-3">2</td><td class="p-3">85%</td><td class="p-3">3-5 د</td><td class="p-3 text-sm">شد عضلات الظهر (Lats)، صدرك لأعلى، اسحب البار من الأرض.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeffnippardfitness/video/7351423642946850053" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Dip</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 8</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">انحنِ بجذعك للأمام 15 درجة، حافظ على لوحي كتفك مشدودين.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@yourdailygents/video/7353437017583144235" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Glute Ham Raise (GHR)</td><td class="p-3">3</td><td class="p-3">10</td><td class="p-3">RPE 6</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">حافظ على استقامة أسفل ظهرك.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@enjayaba/video/7041126277213883675" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Leg Extension</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ركز على عصر عضلات الكوادز.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@deltabolic/video/7507771948806475014" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Cable Pull-over</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 7</td><td class="p-3">1-3 د</td><td class="p-3 text-sm">انحنِ بزاوية 45 درجة، اسحب الوزن لأسفل مباشرة.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@health_and_fitness_vids/video/7494386200837377302" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Dumbbell Lateral Raise</td><td class="p-3">3</td><td class="p-3">20</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ارفع الدمبل "للخارج" وليس "للأعلى".</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeffnippardfitness/video/7368113931832823045" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Rope Face Pull</td><td class="p-3">3</td><td class="p-3">20</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">اسحب كوعيك لأعلى وللخارج، واجمع لوحي كتفك.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@ambition_angel/video/7416403347562958111" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">EZ Bar Skull Crusher</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">حرك البار للخلف خلف رأسك.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeff_nippard_clips/video/7479856230157045014" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-xl fade-in print-friendly">
+                    <h3 class="text-2xl font-bold p-6 bg-gray-700 text-white">اليوم الخامس: تركيز على الكتف (Deltoid Focused)</h3>
+                    <div class="p-2 md:p-6 overflow-x-auto">
+                        <table class="w-full text-right">
+                            <thead class="text-teal-400 text-sm">
+                                <tr><th class="p-3">التمرين</th><th class="p-3">المجموعات</th><th class="p-3">التكرارات</th><th class="p-3">الشدة</th><th class="p-3">الراحة</th><th class="p-3">ملاحظات</th><th class="p-3 video-link">فيديو</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Overhead Press</td><td class="p-3">4</td><td class="p-3">6</td><td class="p-3">75%</td><td class="p-3">2-3 د</td><td class="p-3 text-sm">شد عضلات الأرداف، ادفع لأعلى وإلى الخلف قليلًا.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7187195229886221574" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Egyptian Lateral Raise</td><td class="p-3">3</td><td class="p-3">8</td><td class="p-3">RPE 8</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">حركة سلبية في ثانيتين، انحنِ بعيدًا عن الكابل.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@jeffnippardfitness/video/7338448295838174469" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Cable Seated Row</td><td class="p-3">3</td><td class="p-3">12</td><td class="p-3">RPE 7</td><td class="p-3">1-3 د</td><td class="p-3 text-sm">ركز على جمع لوحي الكتف.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@yourdailygents/video/7369004438947728683" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Seated Hip Abduction</td><td class="p-3">3</td><td class="p-3">20</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ركز على دفع ركبتيك للخارج.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@visionarylooks/video/7483281568128191766" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Incline Dumbbell Curl</td><td class="p-3">2</td><td class="p-3">10</td><td class="p-3">RPE 8</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">ثبت ظهرك العلوي على البنش (زاوية 45 درجة).</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@petermiljak/video/7216870144465751301" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Bicycle Crunch</td><td class="p-3">3</td><td class="p-3">15</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">قرب كوعك الأيسر من ركبتك اليمنى والعكس.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@kelvinteo93/video/7253388313359420674" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Standing Calf Raise</td><td class="p-3">4</td><td class="p-3">12</td><td class="p-3">RPE 7</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">اضغط على أصابع قدميك.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@cbum/video/7063199666237738246" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                                <tr class="hover:bg-gray-700/50"><td class="p-3 font-bold">Push Up</td><td class="p-3">2</td><td class="p-3">RPE Only</td><td class="p-3">RPE 6</td><td class="p-3">1-2 د</td><td class="p-3 text-sm">أكبر عدد ممكن من التكرارات للوصول إلى RPE 6.</td><td class="p-3 video-link"><a href="https://www.tiktok.com/@deltabolic/video/7495175866750668038" target="_blank" class="text-teal-400 hover:text-teal-300">شاهد</a></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // --- Reveal on Scroll ---
-            const revealElements = document.querySelectorAll('.reveal');
-            const revealObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.1 });
-            revealElements.forEach(el => { revealObserver.observe(el); });
-
-            // --- Sidebar Navigation ---
-            const navLinks = document.querySelectorAll('.sidebar-nav a');
-            const sections = document.querySelectorAll('main section');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-                });
-            });
-            const navObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        navLinks.forEach(link => {
-                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
-                        });
-                    }
-                });
-            }, { rootMargin: '-50% 0px -50% 0px'});
-            sections.forEach(section => { navObserver.observe(section); });
-
-            // --- Modal Logic ---
-            const planDetails = {
-                'content-marketing': {
-                    title: 'باقة التسويق بالمحتوى',
-                    price: '$300 شهريًا',
-                    details: [
-                        'إعداد استراتيجية تسويق محتوى مخصصة للبراند.',
-                        'كتابة خطة محتوى شهرية تبدأ من 15 فكرة Reels قابلة للتعديل.',
-                        'تحليل الحساب الحالي وتحسينه من حيث المواضيع والأسلوب.',
-                        'توجيه بصري إبداعي لكيفية تنفيذ الأفكار (سكربتات، أمثلة).',
-                        'Edit احترافي للمحتوى الذي يقوم العميل بتصويره.',
-                        'المنصات المدعومة: Instagram, Facebook, TikTok (بقياس Reels فقط).'
-                    ]
-                },
-                'performance-marketing': {
-                    title: 'باقة التسويق بالأداء',
-                    price: '$300 شهريًا',
-                    details: [
-                        'تحليل الحساب الإعلاني الحالي وتحديد فرص التحسين.',
-                        'وضع استراتيجية الإعلان والأهداف بدقة (منصة Meta).',
-                        'كتابة كوبي رايتنج إعلاني محترف لكل إعلان.',
-                        'توجيه بصري لطريقة تصوير الإعلانات.',
-                        'إدارة الميزانية الإعلانية باحتراف.',
-                        'إدارة وتحسين مستمر للحملات (15 إعلان شهري كحد أدنى).',
-                        'Edit احترافي للإعلانات التي يصورها العميل.',
-                        '<strong>إضافة منصة إضافية (TikTok أو Snapchat): +100 دولار لكل منصة.</strong>'
-                    ]
-                },
-                'integrated': {
-                    title: 'الباقة المتكاملة',
-                    price: '$500 شهريًا',
-                    details: [
-                        '<strong>توفير كامل بقيمة 100$:</strong> تجمع كل ما في باقة التسويق بالمحتوى وباقة التسويق بالأداء بسعر مخفض.',
-                        'توحيد الاستراتيجيات بين المحتوى العضوي والمدفوع لتحقيق أفضل النتائج.',
-                        'تقارير مدمجة توضح أداء المحتوى والحملات معًا.'
-                    ]
-                },
-                'growth': {
-                    title: 'باقة النمو',
-                    price: '$750 شهريًا',
-                    details: [
-                        '<strong>كل ما في الباقة المتكاملة.</strong>',
-                        'إعداد CRM كامل باستخدام <strong>ManyChat</strong>.',
-                        'بناء أوتوميشن لرسائل المبيعات وإعادة الاستهداف الذكي عبر المحادثات.',
-                        'تصميم صفحتين هبوط احترافيتين (Landing Pages) حسب حاجة الحملة.',
-                        'الصفحة الثالثة فأكثر تُحتسب بتكلفة إضافية حسب الاتفاق.'
-                    ]
-                },
-                 'growth-pro': {
-                    title: 'باقة النمو برو',
-                    price: '$1200 شهريًا',
-                    details: [
-                        '<strong>كل ما في الباقة المتكاملة.</strong>',
-                        'إعداد وتخصيص كامل لنظام <strong>GoHighLevel CRM</strong> المتكامل.',
-                        'بناء حملات تسويق أوتوماتيكية متقدمة (Email, SMS, Voice Calls).',
-                        'تصميم صفحتين هبوط عاليتي التحويل مع نماذج ذكية.',
-                        'إدارة سمعة العملاء وجمع التقييمات بشكل آلي.',
-                        'تقارير شهرية مفصلة عن الأداء وعائد الاستثمار (ROI) من لوحة تحكم واحدة.'
-                    ]
-                },
-                'partnership-percentage': {
-                    title: 'باقة الشراكة (نسبة)',
-                    price: '14% من المبيعات',
-                    details: [
-                        '<strong>إنتاج المحتوى بالكامل من قبل فريق خطوات.</strong>',
-                        'يشمل: فيديوهات Reels، جلسات تصوير، موشن جرافيك، UGC، CGI، Unboxing، Reviews، استخدام مودلز.',
-                        'تُحتسب النسبة من مبيعات البراند ابتداءً من إطلاق أول حملة.',
-                        'مدة التعاقد: 6 أشهر غير قابلة للتجديد التلقائي.',
-                        'يُدفع مبلغ مقدم يتم اقتطاعه لاحقًا من النسبة.',
-                        'تطوير مستمر للحملات وإنتاج المحتوى طوال فترة التعاقد.',
-                        'لا يحق للعميل التعاقد مع جهات تسويقية أخرى خلال فترة الاشتراك.'
-                    ]
-                },
-                'partnership-fixed': {
-                    title: 'باقة الشراكة (اشتراك ثابت)',
-                    price: '$2800 شهريًا',
-                    details: [
-                        '<strong>إنتاج المحتوى بالكامل من قبل فريق خطوات.</strong>',
-                        'يشمل: فيديوهات Reels، جلسات تصوير، موشن جرافيك، UGC، CGI، Unboxing، Reviews، استخدام مودلز.',
-                        'يُدفع أول مبلغ 2800 دولار مقدمًا.',
-                        'تشمل أول 20 يومًا: التحضير، البحث، فهم البراند، والتخطيط للحملة.',
-                        'يبدأ الاشتراك الفعلي من تاريخ نشر أول قطعة محتوى ويستمر لمدة 30 يومًا.',
-                        'يتم تجديد الاشتراك كل 30 يوم باتفاق واضح حول المخرجات.',
-                        'لا يحق للعميل التعاقد مع جهات تسويقية أخرى خلال فترة الاشتراك.'
-                    ]
-                }
-            };
-
-            const modal = document.getElementById('plan-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalContent = document.getElementById('modal-content');
-            const closeModalBtn = document.getElementById('modal-close');
-            const clickableCards = document.querySelectorAll('[data-plan]');
-
-            clickableCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const planKey = card.dataset.plan;
-                    const data = planDetails[planKey];
-
-                    if (data) {
-                        modalTitle.textContent = data.title;
-                        
-                        let contentHTML = `<p class="text-2xl font-bold text-cyan-300 mb-6">${data.price}</p>`;
-                        contentHTML += '<ul class="space-y-3 list-disc pr-5">';
-                        data.details.forEach(item => {
-                            contentHTML += `<li class="text-gray-300">${item}</li>`;
-                        });
-                        contentHTML += '</ul>';
-                        
-                        modalContent.innerHTML = contentHTML;
-                        modal.classList.add('visible');
-                    }
-                });
-            });
-
-            function closeModal() {
-                modal.classList.remove('visible');
-            }
-
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+        // Accordion functionality
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
             });
         });
+
+        // Fade-in on scroll functionality
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('visible');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
     </script>
+
 </body>
 </html>
